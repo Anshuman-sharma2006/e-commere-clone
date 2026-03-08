@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Product{
+  id String @id @default(uuid())
+  name String
+  priceIntRupees Int
+  filePath String                                  //todo This is the path to the product file (e.g., PDF, DOCX)
+  imagePath String                                //todo This is the path to the product image (e.g., JPEG, PNG)
+  description String                              //todo This is a brief description of the product
+  isAvialableForPurchase Boolean @default(true)   //todo This indicates whether the product is available for purchase
+  CreatedAt DateTime @default(now())              //todo This is the timestamp when the product was created(Automatically stores current date & time when record is created)
+  updatedAt DateTime @updatedAt                   //todo This is the timestamp when the product was last updated(Automatically updates the timestamp whenever the record changes)
+  orders Order[]                                     //todo This sets up a one-to-many relationship between the Product and Order models, allowing you to access all orders associated with a product.(one user muliple order one one order data showing)
+  downloadVerification DownlodVerification[]         //todo This sets up a one-to-many relationship between the Product and DownloadVerification models, allowing you to access all download verifications associated with a product.
+}
+model User{
+  id String @id @default(uuid())
+   email String
+   CreatedAt DateTime @default(now()) 
+   updatedAt DateTime @updatedAt 
+   order Order[]  //
+}
+model Order{
+  id String @id @default(uuid())
+  pricePaidIntRupees Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId String
+  ProductId String
+  user User @relation(fields: [userId], references: [id],onDelete: Cascade)                      //? one order can have one user                                           This sets up a relationship between the Order and User models, linking the userId field in the Order model to the id field in the User model. The onDelete: Cascade option ensures that if a user is deleted, all their associated orders will also be deleted.
+  product Product @relation(fields: [ProductId], references: [id],onDelete: Cascade)              //todo This sets up a relationship between the Order and Product models, linking the ProductId field in the Order model to the id field in the Product model. The onDelete: Cascade option ensures that if a product is deleted, all associated orders will also be deleted.
+  //?Cascade = delete dependent rows automatically.
+  //*->It’s useful for keeping your database clean but be careful: it permanently deletes child rows.
+
+}
+model DownlodVerification{
+id String @id @default(uuid())
+  expireAt DateTime 
+  createdAt DateTime @default(now())
+  productId String
+  product Product @relation(fields: [productId], references: [id],onDelete: Cascade)              //todo This sets up a relationship between the DownloadVerification and Product models, linking the productId field in the DownloadVerification model to the id field in the Product model. The onDelete: Cascade option ensures that if a product is deleted, all associated download verifications will also be deleted.
+}
