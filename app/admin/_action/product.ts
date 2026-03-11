@@ -1,38 +1,69 @@
 "use server"
-import db from "@/db/db"
-import { z } from "zod"//!Data validation library(DataComingFromTheFormIsCorrectOrNot.)
+
+import { db } from "@/db/db"
+import { z } from "zod"
 import fs from "fs/promises"
-import { notFound, redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 
-const fileSchema = z.instanceof(File, { message: "Required" })  //?File Must Be Object and Required
+const fileSchema = z.instanceof(File, { message: "Required" })
+
 const imageSchema = fileSchema.refine(
-  file => file.size === 0 || file.type.startsWith("image/") //?If file is empty or file type is image(png,jpg, jpeg, gif, svg, webp) then it is valid
+  file => file.size === 0 || file.type.startsWith("image/"),
+  { message: "File must be an image" }
 )
-const addSchema = z.object({//*This Reprsent Entire Schema of the form
-  name: z.string().min(1),         //?Name Must Be String and AtLeast 1 Character 
-  description: z.string().min(1),
-  priceInRp: z.coerce.number().int().min(1),
-  file: fileSchema.refine(file => file.size > 0, "Required"),
-  image: imageSchema.refine(file => file.size > 0, "Required"),
+
+const addSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  description: z.string().min(1, "Description is required"),
+  priceIntRupees: z.coerce.number().int().min(1, "Price must be greater than 0"),
+  file: fileSchema.refine(file => file.size > 0, "File is required"),
+  image: imageSchema.refine(file => file.size > 0, "Image is required"),
 })
-//Previous Form State->prevState
-//Form Submited State->formData
-export async function addProduct(prevState: unknown, formData: FormData) {
-  const result = addSchema.safeParse(Object.fromEntries(formData.entries()))
-  if (result.success === false) {
-    const errors =result.error.format().fieldErrors
-    return {errors}
+
+type FormState = {
+  errors: {
+    name?: string[]
+    description?: string[]
+    priceIntRupees?: string[]
+    file?: string[]
+    image?: string[]
+  }
+}
+
+export async function addProduct(
+  prevState: FormState,
+  formData: FormData
+): Promise<FormState> {
+
+  const result = addSchema.safeParse({
+    name: formData.get("name"),
+    description: formData.get("description"),
+    priceIntRupees: formData.get("priceIntRupees"),
+    file: formData.get("file"),
+    image: formData.get("image"),
+  })
+  //  console.log(result)  
+  if (!result.success) {
+    const { fieldErrors } = result.error.flatten()
+    return { errors: fieldErrors ?? {} }
   }
 
   const data = result.data
 
   await fs.mkdir("products", { recursive: true })
+
   const filePath = `products/${crypto.randomUUID()}-${data.file.name}`
-  await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()))
+
+  await fs.writeFile(
+    filePath,
+    Buffer.from(await data.file.arrayBuffer())
+  )
 
   await fs.mkdir("public/products", { recursive: true })
+
   const imagePath = `/products/${crypto.randomUUID()}-${data.image.name}`
+
   await fs.writeFile(
     `public${imagePath}`,
     Buffer.from(await data.image.arrayBuffer())
@@ -40,10 +71,10 @@ export async function addProduct(prevState: unknown, formData: FormData) {
 
   await db.product.create({
     data: {
-      isAvailableForPurchase: false,
+      isAvialableForPurchase: false,
       name: data.name,
       description: data.description,
-      priceInCents: data.priceInCents,
+      priceIntRupees: data.priceIntRupees,
       filePath,
       imagePath,
     },
@@ -54,5 +85,3 @@ export async function addProduct(prevState: unknown, formData: FormData) {
 
   redirect("/admin/products")
 }
-
-
