@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { db } from "@/db/db";
 import { PageHeader } from "../_component/PageHeader";
 import Link from"next/link"
 import {Table,TableBody,TableCell,TableHead,TableHeader,  TableRow,} from "@/components/ui/table"
@@ -14,7 +15,19 @@ export default function ProductPage(){
     </>
 
 }
-function ProductTables(){
+async function ProductTables(){
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      priceIntRupees: true,
+      isAvialableForPurchase: true,
+      _count: { select: { orders: true } },
+    },
+    orderBy: { name: "asc" },
+  })
+
+  if (products.length === 0) return <p>No products found</p>
     return(
          <Table>
       <TableHeader>
