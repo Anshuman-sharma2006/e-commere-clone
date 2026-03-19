@@ -1,13 +1,26 @@
-  import { Button } from "@/components/ui/button";
-  import { db } from "@/db/db";
-  import { PageHeader } from "../_component/PageHeader";
-  import Link from"next/link"
-  import {Table,TableBody,TableCell,TableHead,TableHeader,  TableRow,} from "@/components/ui/table"
+import { Button } from "@/components/ui/button";
+import { db } from "@/db/db";
+import { PageHeader } from "../_component/PageHeader";
+import Link from "next/link";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { formatNumber, formatCurrency } from "@/lib/formatter";
-import { CheckCircle2, XCircle, MoreVertical } from "lucide-react";// Icons
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"; // Dropdown components
+import { CheckCircle2, XCircle, MoreVertical } from "lucide-react"; // Icons
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu"; // Dropdown components
+import { ActiveToggleDropdownItem,DeleteDropdownItem } from "./_component/ProductAction";
 // import { DeleteDropdownItem, ActiveToggleDropdownItem } from "@/components/admin/products"; // Custom actions
-
 
 export default function ProductPage() {
   return (
@@ -73,46 +86,34 @@ async function ProductTables() {
             <TableCell>{formatNumber(product._count.orders)}</TableCell>
             <TableCell>
               <DropdownMenu>
-  <DropdownMenuTrigger asChild>
-    <button>
-      <MoreVertical />
-      <span className="sr-only">Open actions menu</span>
-    </button>
-  </DropdownMenuTrigger>
-  <DropdownMenuContent className=" bg-popover p-4 rounded-lg shadow-lg w-59">
-    <DropdownMenuItem asChild >
-      <a download href={`/admin/products/${product.id}/download`}>Download</a>
-    </DropdownMenuItem>
-    <DropdownMenuItem asChild >
-      <Link href={`/admin/products/${product.id}/edit`}>Edit</Link>
-    </DropdownMenuItem>
-  </DropdownMenuContent>
-</DropdownMenu>
-
-              {/* <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <span className="sr-only">Actions</span>
+                <DropdownMenuTrigger asChild>
+                  <button>
+                    <MoreVertical />
+                    <span className="sr-only">Open actions menu</span>
+                  </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent className=" bg-popover p-4 rounded-lg shadow-lg w-59">
                   <DropdownMenuItem asChild>
                     <a download href={`/admin/products/${product.id}/download`}>
                       Download
                     </a>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href={`/admin/products/${product.id}/edit`}>Edit</Link>
+                    <Link href={`/admin/products/${product.id}/edit`}>
+                      Edit
+                    </Link>
                   </DropdownMenuItem>
-                  <ActiveToggleDropdownItem
-                    id={product.id}
-                    isAvailableForPurchase={product.isAvialableForPurchase}
-                  />
-                  <DropdownMenuSeparator />
-                  <DeleteDropdownItem
-                    id={product.id}
-                    disabled={product._count.orders > 0}
-                  />
+                 <ActiveToggleDropdownItem  id={product.id} isAvailableForPurchase={product.isAvialableForPurchase} />
+                  <DropdownMenuSeparator className="my-2 bg-gray-300 h-[1px]" />
+                  {/* <DropdownMenuSeparator /> */}
+                  {/* <DropdownMenuSeparator /> */}
+                  {/* <DropdownMenuSeparator /> */}
+                   
+                   <DeleteDropdownItem id={product.id} disabled={product._count.orders > 0}  />
+                
                 </DropdownMenuContent>
-              </DropdownMenu> */}
+              </DropdownMenu>
+
             </TableCell>
           </TableRow>
         ))}

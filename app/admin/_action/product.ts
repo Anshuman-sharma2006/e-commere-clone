@@ -85,3 +85,29 @@ export async function addProduct(
 
   redirect("/admin/products")
 }
+export async function toggleProductAvailability(id:string,isAvialableForPurchase:boolean){
+  await db.product.update({
+    where: {id},
+    data:{isAvialableForPurchase}
+    
+  })
+await Promise.all([
+  revalidatePath("/"),
+  revalidatePath("/products")
+])
+
+} 
+export async function deleteProduct(id: string){
+  const product=await db.product.findUnique({where:{id}})
+  if(!product) return;
+
+  await Promise.all([
+    db.product.delete({where:{id}}),
+    fs.unlink(product.filePath).catch(() => {}),
+    fs.unlink(`public${product.imagePath}`).catch(() => {})
+  ])
+  await Promise.all([
+    revalidatePath("/"),
+    revalidatePath("/products")
+  ])
+}

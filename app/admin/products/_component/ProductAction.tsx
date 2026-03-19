@@ -2,11 +2,8 @@
 
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { useTransition } from "react"
-// import {
-//   deleteProduct,
-//   toggleProductAvailability,
-// } from "../../_actions/products"
 import { useRouter } from "next/navigation"
+import { deleteProduct, toggleProductAvailability } from "../../_action/product"
 
 export function ActiveToggleDropdownItem({
   id,
@@ -26,6 +23,7 @@ export function ActiveToggleDropdownItem({
           router.refresh()
         })
       }}
+
     >
       {isAvailableForPurchase ? "Deactivate" : "Activate"}
     </DropdownMenuItem>
@@ -51,6 +49,7 @@ export function DeleteDropdownItem({
           router.refresh()
         })
       }}
+      variant = "default"
     >
       Delete
     </DropdownMenuItem>
