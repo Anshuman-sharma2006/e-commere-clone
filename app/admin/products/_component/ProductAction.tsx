@@ -49,7 +49,7 @@ export function DeleteDropdownItem({
           router.refresh()
         })
       }}
-      variant = "default"
+      
     >
       Delete
     </DropdownMenuItem>

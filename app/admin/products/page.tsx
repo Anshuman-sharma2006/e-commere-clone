@@ -104,13 +104,8 @@ async function ProductTables() {
                     </Link>
                   </DropdownMenuItem>
                  <ActiveToggleDropdownItem  id={product.id} isAvailableForPurchase={product.isAvialableForPurchase} />
-                  <DropdownMenuSeparator className="my-2 bg-gray-300 h-[1px]" />
-                  {/* <DropdownMenuSeparator /> */}
-                  {/* <DropdownMenuSeparator /> */}
-                  {/* <DropdownMenuSeparator /> */}
-                   
-                   <DeleteDropdownItem id={product.id} disabled={product._count.orders > 0}  />
-                
+                  <DropdownMenuSeparator/>
+                   <DeleteDropdownItem id={product.id} disabled={product._count.orders > 0} />
                 </DropdownMenuContent>
               </DropdownMenu>
 
