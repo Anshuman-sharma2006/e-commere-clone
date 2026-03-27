@@ -1,4 +1,5 @@
 "use client"
+import Image from "next/image";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -7,10 +8,10 @@ import { formatCurrency, formatNumber } from "@/lib/formatter"
 import { useFormStatus,useFormState  } from "react-dom"
 import { useActionState } from "react"
 import { useState } from "react"
-import { addProduct } from "../../_action/product"
-export function ProductForm(){
-    const [error, action] = useActionState(addProduct, { errors: {}})//*connects the form to the addProduct server action and keeps the returned state (like validation errors)
-     const [priceIntRupees, setpriceIntRupees] = useState<number>()
+import { addProduct, updateProduct } from "../../_action/product"
+export function ProductForm({product}:{product?:{ id:string, name:string, priceIntRupees:number, description:string, filePath:string, imagePath:string}}) {
+    const [error, action] = useActionState(product==null ? addProduct: updateProduct.bind(null,product.id), { errors: {}})//*connects the form to the addProduct server action and keeps the returned state (like validation errors)
+     const [priceIntRupees, setpriceIntRupees] = useState<number>(product?.priceIntRupees || 0)
     return (
     <>
  <form action={action} className="space-y-8">
@@ -21,7 +22,7 @@ export function ProductForm(){
           id="name"
           name="name"
           required
-          // defaultValue={product?.name || ""}
+          defaultValue={product?.name || ""}
         />
         {/* {error.name && <div className="text-destructive">{error.name}</div>} */}
       {error.errors.name && (
@@ -49,20 +50,20 @@ export function ProductForm(){
           id="description"
           name="description"
           required
-          // defaultValue={product?.description}
+          defaultValue={product?.description}
         />
         {error.errors.description && (<div className="text-destructive">{error.errors.description[0]}</div> )}
       </div>
       <div className="space-y-2">
         <Label htmlFor="file">File</Label>
-        <Input type="file" id="file" name="file" required />
-        {/* {product != null && (<div className="text-muted-foreground">{product.filePath}</div>)} */}
+        <Input type="file" id="file" name="file" required={product==null} />
+        {product != null && (<div className="text-muted-foreground">{product.filePath.split("/").pop()}</div>)}
         {error.errors.file && <div className="text-destructive">{error.errors.file[0]}</div>}
       </div>
       <div className="space-y-2">
         <Label htmlFor="image">Image</Label>
-        <Input type="file" id="image" name="image" required />
-        {/* {product != null && (<Imagesrc={product.imagePath}height="400"width="400"alt="Product Image"/>)} */}
+        <Input type="file" id="image" name="image" required={product==null} />
+        {product != null && (<Image src={product.imagePath}height="400"width="400"alt="Product Image"/>)}
         {error.errors.image && <div className="text-destructive">{error.errors.image[0]}</div>}
       </div>
       <SubmitButton />
