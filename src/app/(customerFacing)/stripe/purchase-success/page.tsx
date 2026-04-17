@@ -7,7 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
 import Stripe from "stripe"
-
+import { redirect } from "next/navigation"
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 
 export default async function SuccessPage({
@@ -24,6 +24,10 @@ searchParams: Promise<{ payment_intent?: string }>
   )
 
   console.log(paymentIntent)
+//   const paymentMethod = await stripe.paymentMethods.retrieve(
+//   paymentIntent.payment_method as string
+// );
+  // console.log("receipt_email:", paymentMethod.billing_details.email);
   if (paymentIntent.metadata.productId == null) return notFound()
 
   const product = await db.product.findUnique({
@@ -32,6 +36,11 @@ searchParams: Promise<{ payment_intent?: string }>
   if (product == null) return notFound()
 
   const isSuccess = paymentIntent.status === "succeeded"
+  let downloadId: string | null = null
+
+if (paymentIntent.status === "succeeded") {
+  downloadId = await createDownloadVerification(product.id)
+}
 
   return (
     <div className="max-w-5xl w-full mx-auto space-y-8">
@@ -56,7 +65,7 @@ searchParams: Promise<{ payment_intent?: string }>
             {product.description}
           </div>
           <Button className="mt-4" size="lg" asChild>
-            {isSuccess ? (
+            {isSuccess &&  downloadId? (
               <a
                 href={`/products/download/${await createDownloadVerification(
                   product.id

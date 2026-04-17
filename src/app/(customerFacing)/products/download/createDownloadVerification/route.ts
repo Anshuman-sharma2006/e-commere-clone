@@ -1,4 +1,4 @@
-import db from "@/db/db"
+import {db} from "@/db/db"
 import { NextRequest, NextResponse } from "next/server"
 import fs from "fs/promises"
 
@@ -8,9 +8,10 @@ export async function GET(
     params: { downloadVerificationId },
   }: { params: { downloadVerificationId: string } }
 ) {
-  const data = await db.downloadVerification.findUnique({
-    where: { id: downloadVerificationId, expiresAt: { gt: new Date() } },
+  const data = await db.downlodVerification.findUnique({
+    where: { id: downloadVerificationId, expireAt: { gt: new Date() } },
     select: { product: { select: { filePath: true, name: true } } },
+     
   })
 
   if (data == null) {

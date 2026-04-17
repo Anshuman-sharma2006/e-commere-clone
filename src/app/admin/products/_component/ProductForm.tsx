@@ -37,10 +37,10 @@ export function ProductForm({product}:{product?:{ id:string, name:string, priceI
           name="priceIntRupees"
           required
           value={priceIntRupees ?? ""}
-          onChange={e => setpriceIntRupees(Number(e.target.value) || undefined)}
+          onChange={e => setpriceIntRupees(Number(e.target.value) ?? undefined)}
         />
         <div className="text-muted-foreground">
-          {formatCurrency((priceIntRupees || 0) )}
+          {formatCurrency((priceIntRupees*100 || 0) )}
         </div>
         {error.errors.priceIntRupees && ( <div className="text-destructive">{error.errors.priceIntRupees[0]}</div>)}
       </div>

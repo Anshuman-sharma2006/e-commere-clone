@@ -46,6 +46,7 @@ export function CheckoutForm({ product, clientSecret }: CheckformProps) {
               fill
               alt={product.name}
               className="object-cover"
+              priority
             />
           </div>
           <div>
@@ -81,6 +82,11 @@ function Form({
   const [email, setEmail] = useState<string>("")
   async function handleSubmit(e: SubmitEvent) {
     e.preventDefault();
+    if (!email) {
+  setErrorMessage("Please enter your email first");
+  setIsLoading(false);
+  return;
+}
     if (stripe == null || elements == null) return;
     setIsLoading(true);
         const orderExists = await userOrderExists(email, productId)
