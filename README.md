@@ -1,3 +1,23 @@
+## 🌟 Overview
+
+This project is a modern **E-Commerce web application** built using Next.js and React that allows users to browse products, add items to cart, and complete secure purchases using Stripe.  
+
+It includes a fully functional **admin dashboard** for managing products and orders, along with automated email notifications powered by React Email and Resend.
+
+The backend is powered by Prisma with PostgreSQL, ensuring scalability, performance, and type-safe database operations.
+
+---
+
+## ✨ Key Features
+
+- 🛍️ Product browsing & management  
+- 🛒 Add to cart & checkout system  
+- 💳 Secure payments (Stripe integration)  
+- 📧 Automated email notifications (order receipt, history)  
+- 🔐 Admin dashboard (protected routes)  
+- ⚡ Fast and responsive UI  
+
+---
 ## Technology Used 
 | Technology | Purpose | Why it was Chosen |
 | :--- | :--- | :--- |
