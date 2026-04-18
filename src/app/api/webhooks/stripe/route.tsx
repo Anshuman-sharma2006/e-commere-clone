@@ -2,9 +2,9 @@ import { db } from "@/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import Stripe from "stripe";
-import React from "react"
-import { render } from "@react-email/components";
-import PurchaseReceiptEmail from "@/email/PurchaseReceipt";
+// import React from "react"
+// import { render } from "@react-email/components";
+import PurchaseReceiptEmail from "@/src/email/PurchaseReceiptEmail";
 console.log("Webhook received");
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string)
 const resend = new Resend(process.env.RESEND_API_KEY as string)
@@ -51,13 +51,20 @@ const paymentMethod = await stripe.paymentMethods.retrieve(
         expireAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
       },
     })
-    
+    console.log(process.env.SENDER_EMAIL)
       try {
   const result = await resend.emails.send({
     from: `Support <${process.env.SENDER_EMAIL}>`,
     to: email,
     subject: "Order Confirmation",
-    html: "<h1 >Successfully Purchased</h1>",
+    react: (
+  <PurchaseReceiptEmail
+    product={product}
+    order={order}
+    downloadVerificationId={downloadVerification.id}
+    
+  />
+),
   })
 
   console.log("Resend result:", result)

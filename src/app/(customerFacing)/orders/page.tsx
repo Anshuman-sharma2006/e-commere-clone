@@ -1,6 +1,5 @@
 "use client"
 
-import { emailOrderHistory } from "@/src/"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -10,12 +9,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {emailOrderHistory} from "@/src/action/order"
+
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useFormState, useFormStatus } from "react-dom"
+import {  useActionState } from "react"
+import { useFormStatus } from "react-dom";
 
 export default function MyOrdersPage() {
-  const [data, action] = useFormState(emailOrderHistory, {})
+  const [data, action] =  useActionState(emailOrderHistory, {})
   return (
     <form action={action} className="max-2-xl mx-auto">
       <Card>
@@ -30,12 +32,16 @@ export default function MyOrdersPage() {
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input type="email" required name="email" id="email" />
-            {/* {data.error && <div className="text-destructive">{data.error}</div>} */}
+            {data.error && <div className="text-destructive">{data.error}</div>}
           </div>
+          {/* {data.message ? <p className="text-green-600">{data.message}</p> : null} */}
         </CardContent>
         <CardFooter>
-            <SubmitButton />
-          {/* {data.message ? <p>{data.message}</p> : <SubmitButton />} */}
+              {data.message ? (
+    <p className="text-green-600">{data.message}</p>
+  ) : (
+    <SubmitButton />
+  )}
         </CardFooter>
       </Card>
     </form>

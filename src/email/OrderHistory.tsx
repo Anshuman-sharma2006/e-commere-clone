@@ -8,15 +8,16 @@ import {
   Preview,
   Tailwind,
 } from "@react-email/components"
+import {randomUUID} from "crypto"
 import { OrderInformation } from "./components/OrderInformation"
 import React from "react"
 
 type OrderHistoryEmailProps = {
   orders: {
     id: string
-    pricePaidInCents: number
+    pricePaidIntRupees: number
     createdAt: Date
-    downloadVerificationId: string
+    downlodVerificationId: string
     product: {
       name: string
       imagePath: string
@@ -28,10 +29,10 @@ type OrderHistoryEmailProps = {
 OrderHistoryEmail.PreviewProps = {
   orders: [
     {
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       createdAt: new Date(),
-      pricePaidInCents: 10000,
-      downloadVerificationId: crypto.randomUUID(),
+      pricePaidIntRupees: 10000,
+      downlodVerificationId: randomUUID(),
       product: {
         name: "Product name",
         description: "Some description",
@@ -40,10 +41,10 @@ OrderHistoryEmail.PreviewProps = {
       },
     },
     {
-      id: crypto.randomUUID(),
+      id: randomUUID(),
       createdAt: new Date(),
-      pricePaidInCents: 2000,
-      downloadVerificationId: crypto.randomUUID(),
+      pricePaidIntRupees: 2000,
+      downlodVerificationId: randomUUID(),
       product: {
         name: "Product name 2",
         description: "Some other desc",
@@ -68,7 +69,7 @@ export default function OrderHistoryEmail({ orders }: OrderHistoryEmailProps) {
                 <OrderInformation
                   order={order}
                   product={order.product}
-                  downloadVerificationId={order.downloadVerificationId}
+                  downloadVerificationId={order.downlodVerificationId}
                 />
                 {index < orders.length - 1 && <Hr />}
               </React.Fragment>
