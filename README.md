@@ -67,7 +67,30 @@ project-root/
 ```
 
 ---
+## 🔐 Environment Variables
 
+Create a `.env` file in the root directory and add the following:
+
+```env
+# Database
+DATABASE_URL="file:./dev.db"  # SQLite (local dev) or PostgreSQL URL in production
+
+# Admin Credentials
+ADMIN_USERNAME=admin
+HASHED_ADMIN_PASSWORD=your_hashed_password
+
+# Stripe (Payments)
+STRIPE_SECRET_KEY=your_stripe_secret_key
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_publishable_key
+STRIPE_WEBHOOK_SECRET=your_webhook_secret
+
+# App URL
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+
+# Email (Resend)
+RESEND_API_KEY=your_resend_api_key
+SENDER_EMAIL=your_verified_sender_email
+```
 ## 🚀 Getting Started
 
 Follow these steps to set up  in your local development environment.
