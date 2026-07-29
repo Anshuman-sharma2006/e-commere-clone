@@ -105,7 +105,7 @@ Follow these steps to set up  in your local development environment.
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/documentation-master-ai.git
+   git clone https://github.com/Anshuman-sharma2006/documentation-master-ai.git
    cd documentation-master-ai
    ```
 
