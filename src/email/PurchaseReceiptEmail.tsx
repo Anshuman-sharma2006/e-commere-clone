@@ -33,7 +33,7 @@ PurchaseReceiptEmail.PreviewProps = {
   },
   order: {
     id: randomUUID(),
-    createdAt:  "14 Apr 2025",
+    createdAt:  "22 Apr 2026",
     pricePaidIntRupees: 10000,
   },
   downloadVerificationId: randomUUID(),
