@@ -14,7 +14,7 @@ const getProducts = cache(
   },
   ["/products", "getProducts"]
 )
-
+// console.log("product",Product)
 export default function products() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
